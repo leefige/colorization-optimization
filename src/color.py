@@ -64,12 +64,12 @@ def set_color(color, hsv):
     mark_idx_pair = np.nonzero(color)
     mark_idx_linear = mark_idx_pair[1] * height + mark_idx_pair[0]
 
-    wd = 1
-    vec_len = int(size * pow(2 * wd + 1, 2))
+    neighbour = 1
+    vec_len = int(size * pow(2 * neighbour + 1, 2))
     col_idx = np.zeros([vec_len, 1])
     row_idx = np.zeros([vec_len, 1])
     vals = np.zeros([vec_len, 1])
-    gvals = np.zeros([1, int(pow(2 * wd + 1, 2))])
+    gvals = np.zeros([1, int(pow(2 * neighbour + 1, 2))])
 
     # print(element_idx.shape, mark_idx_linear, col_idx.shape, gvals.shape)
 
@@ -81,8 +81,8 @@ def set_color(color, hsv):
             # spread color
             if not color[i, j]:
                 tlen = 0
-                for ii in range(max((0, i - wd)), min((height, i + wd + 1))):
-                    for jj in range(max((0, j - wd)), min((width, j + wd + 1))):
+                for ii in range(max((0, i - neighbour)), min((height, i + neighbour + 1))):
+                    for jj in range(max((0, j - neighbour)), min((width, j + neighbour + 1))):
                         if ii != i or jj != j:
                             row_idx[llen] = consts_len
                             col_idx[llen] = element_idx[ii, jj]
@@ -99,8 +99,8 @@ def set_color(color, hsv):
                 # control the spread of color
                 if csig < (-mgv / log(0.01)):
                     csig = -mgv / log(0.01)
-                if csig < 0.0000005:
-                    csig = 0.0000005
+                if csig < 0.000005:
+                    csig = 0.000005
 
                 gvals[0, 0:tlen] = np.exp(-np.power(gvals[0, 0:tlen] - tval, 2) / csig)
                 gvals[0, 0:tlen] = gvals[0, 0:tlen] / np.sum(gvals[0, 0:tlen])
